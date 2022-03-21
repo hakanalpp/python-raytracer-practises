@@ -24,11 +24,11 @@ class Scene:
         return self.trace(ray)
 
     def trace(self, ray: 'Ray') -> 'RGBA':
-        inter = float('inf')
+        dist = float('inf')
         color = RGBA(0,0,0,0)
         for obj in self.objects:
-            tempInt = obj.intersect(ray)
-            if(tempInt != -1 and tempInt < inter):
-                inter = tempInt
+            temp_dist = obj.intersect(ray)
+            if(temp_dist != -1 and temp_dist < dist):
+                dist = temp_dist
                 color = obj.color
         return color
