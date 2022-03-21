@@ -3,6 +3,7 @@
 # StudentId: 250201056
 # March 2022
 
+import sys
 import time
 
 from PySide2.QtCore import *
@@ -43,11 +44,15 @@ class MainWindow(QMainWindow):
 		self.height = scene.resolution[1]
 		self.gfxScene = QGraphicsScene()
 		self.scene = scene
+		self.closed = False
+
+	def closeEvent(self, event):
+		self.closed = True
 
 	def setupUi(self):
 		if not self.objectName():
 			self.setObjectName(u"lala")
-		self.resize(self.width + 25, self.height + 25)
+		self.resize(self.width + 25, self.height + 30)
 		self.setWindowTitle("Hakan Alp - Assignment 1")
 		self.setStyleSheet("background-color:black;")
 		self.setAutoFillBackground(True)
@@ -92,24 +97,24 @@ class MainWindow(QMainWindow):
 		self.statusBar.showMessage("Ready...")
 
 
-	def timerBuffer(self):
+	def renderBuffer(self):
 		now = time.time()
 		self.statusBar.showMessage("Sending Camera rays...")
-		imgBuffer: 'list[list[RGBA]]' = self.scene.render()
-		self.statusBar.showMessage(f"{self.scene.sentRayCount} camera rays sent. Updating buffer...")
 
 		# go through pixels
 		for y in range(0, self.height):
 			for x in range(0, self.width):
-				self.paintWidget.imgBuffer.setPixelColor(x, y, imgBuffer[y][x].to_qcolor())
-
+				self.paintWidget.imgBuffer.setPixelColor(x, y, self.scene.send_ray(x,y).to_qcolor())
 			self.updateBuffer()
-			qApp.processEvents()
+			self.qApp.processEvents()
+
+			self.statusBar.showMessage(f"{self.scene.sentRayCount} camera rays sent.")
+
+			if(self.closed):
+				sys.exit(0)
 
 		diff = time.time() - now
-
 		self.statusBar.showMessage(f'{self.scene.sentRayCount} camera rays sent in {diff:.2f} seconds...')
-		self.scene.sentRayCount = 0
 
 	def updateBuffer(self):
 		self.paintWidget.update()

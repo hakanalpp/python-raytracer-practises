@@ -20,9 +20,6 @@ if __name__ == "__main__":
 	mainWindow = MainWindow(qApp, scene)
 	mainWindow.setupUi()
 	mainWindow.show()
-
-	mainTimer = QTimer()
-	mainTimer.timeout.connect(mainWindow.timerBuffer)
-	mainTimer.start(2000)
+	mainWindow.renderBuffer()
 
 	sys.exit(qApp.exec_())

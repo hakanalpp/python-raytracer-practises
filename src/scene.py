@@ -14,19 +14,16 @@ class Scene:
         self.samples = samples
         self.sentRayCount = 0
 
-    def render(self) -> 'list[RGBA]':
-        buffer: 'list[RGBA]' = [[None for i in range(self.resolution[0])] for j in range(self.resolution[1])]
-        for y in range(self.resolution[1]):
-            for x in range(self.resolution[0]):
-                ray: 'Ray' = self.camera.getRay(x, y)
-                buffer[y][x] = self.trace(ray)
-        return buffer
+    def send_ray(self, x,y) -> 'RGBA':
+        self.sentRayCount += 1
+
+        ray: 'Ray' = self.camera.getRay(x, y)
+        return self.trace(ray)
 
     def trace(self, ray: 'Ray') -> 'RGBA':
-        inter = 9999999999999
+        inter = float('inf')
         color = RGBA(0,0,0,0)
         for obj in self.objects:
-            self.sentRayCount += 1
             tempInt = self.intersect(ray, obj)
             if(tempInt != -1 and tempInt < inter):
                 inter = tempInt
