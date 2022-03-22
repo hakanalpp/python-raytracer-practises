@@ -98,7 +98,7 @@ class MainWindow(QMainWindow):
 
     def renderBuffer(self):
         now = time.time()
-        self.statusBar.showMessage("Sending Camera rays...")
+        self.statusBar.showMessage("Sending rays...")
 
         # go through pixels
         for y in range(0, self.height):
@@ -108,14 +108,14 @@ class MainWindow(QMainWindow):
             self.updateBuffer()
             self.qApp.processEvents()
 
-            self.statusBar.showMessage(f"{self.scene.sentRayCount} camera rays sent.")
+            self.statusBar.showMessage(f"{self.scene.sentRayCount} rays sent.")
 
             if self.closed:
                 sys.exit(0)
 
         diff = time.time() - now
         self.statusBar.showMessage(
-            f"{self.scene.sentRayCount} camera rays sent in {diff:.2f} seconds..."
+            f"{self.scene.sentRayCount} rays sent in {diff:.2f} seconds..."
         )
 
     def updateBuffer(self):
