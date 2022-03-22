@@ -22,7 +22,7 @@ class LambertShader(Shader):
                 if temp_dist != -1 and distance - temp_dist > 0.001:
                     ligs.append(l.color * l_factor * (l.intensity / light_count))
                     flag = True
-                    continue
+                    break
             if flag:
                 continue
 
