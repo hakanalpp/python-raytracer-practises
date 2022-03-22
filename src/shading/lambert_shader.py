@@ -18,7 +18,7 @@ class LambertShader(Shader):
             ray = Ray("light", l.position, (hitPoint - l.position).normalize())
             flag = False
             for obj in objects:
-                temp_dist, _, normal, hitPoint = obj.intersect(ray)
+                temp_dist, _, normal, _ = obj.intersect(ray)
                 if temp_dist != -1 and distance - temp_dist > 0.001:
                     ligs.append(l.color * l_factor * (l.intensity / light_count))
                     flag = True
