@@ -54,7 +54,7 @@ class Mesh(Shape):
 
         d = -normal.dot(v[face[0]])
         t = -(normal.dot(ray.position) + d) / nDotRayDirection
-        if t <= 0:
+        if t < 0:
             return [-1, -1]  # Triangle is behind
 
         P = ray.position + t * ray.direction
