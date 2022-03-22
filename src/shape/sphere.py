@@ -17,16 +17,16 @@ class Sphere(Shape):
         self.radius: "float" = radius
         self.color: "RGBA" = RGBA(r, g, b, 255)
 
-    def intersect(self, ray: 'Ray') -> 'float':
+    def intersect(self, ray: 'Ray'):
         oc = ray.position - self.position
         a = ray.direction.dot(ray.direction)
         b = 2.0 * oc.dot(ray.direction)
         c = oc.dot(oc) - (self.radius* self.radius)
         sqr_disc = b*b - 4*a*c
         if sqr_disc < 0:
-            return -1
+            return [-1, None]
         discriminant = sqrt(sqr_disc)
         if (a == 0): a = 0.0000000001 # prevent division by zero
         t0 = (-b + discriminant)/(2*a)
         t1 = (-b - discriminant)/(2*a) 
-        return min(t0,t1)
+        return [min(t0,t1), self.color]

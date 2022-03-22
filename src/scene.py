@@ -27,8 +27,8 @@ class Scene:
         dist = float('inf')
         color = RGBA(0,0,0,0)
         for obj in self.objects:
-            temp_dist = obj.intersect(ray)
+            temp_dist, temp_color = obj.intersect(ray)
             if(temp_dist != -1 and temp_dist < dist):
                 dist = temp_dist
-                color = obj.color
+                color = temp_color
         return color

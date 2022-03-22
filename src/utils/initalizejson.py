@@ -3,10 +3,11 @@
 # StudentId: 250201056
 # March 2022
 
+from .obj_parser import generate_vertices_with_tn
 from ..camera import Camera
 from ..scene import Scene
-from ..shape.sphere import Sphere
-from ..utils.readjson import readJson
+from ..shape import Sphere, Mesh
+from .readjson import readJson
 
 
 def initalize_scene(filename) -> "Scene":
@@ -18,7 +19,7 @@ def initalize_scene(filename) -> "Scene":
         cam["posX"],
         cam["posY"],
         cam["posZ"],
-        60,
+        cam["fov"],
         cam["focalLength"],
         cam["dirX"],
         cam["dirY"],
@@ -30,9 +31,9 @@ def initalize_scene(filename) -> "Scene":
         settings["yres"],
     )
 
-    spheres = []
+    objects = []
     for s in obj["spheres"]:
-        spheres.append(
+        objects.append(
             Sphere(
                 s["posX"],
                 s["posY"],
@@ -44,6 +45,12 @@ def initalize_scene(filename) -> "Scene":
             )
         )
 
+    for o in obj["meshes"]:
+        specs = generate_vertices_with_tn(o["filename"])
+        objects.append(
+            Mesh(specs[0], specs[1], specs[2], specs[3])
+        )
+
     return Scene(
-        settings["xres"], settings["yres"], camera, spheres, settings["samples"]
+        settings["xres"], settings["yres"], camera, objects, settings["samples"]
     )

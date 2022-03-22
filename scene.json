@@ -1,87 +1,38 @@
 {
   "renderSettings": {
-    "xres": 512,
-    "yres": 512,
+    "xres": 480,
+    "yres": 480,
     "samples": 50
   },
   "spheres": [
     {
       "radius": 5,
-      "posX": -11.5,
-      "posY": 9.5,
-      "posZ": -15,
+      "posX": 10.0,
+      "posY": 30,
+      "posZ": 20,
       "color": {
         "r": 77,
         "g": 137,
         "b": 99
       }
-    },
+    }
+  ],
+  "meshes": [
     {
-      "radius": 5,
-      "posX": 11.5,
-      "posY": 9.5,
-      "posZ": -15,
-      "color": {
-        "r": 105,
-        "g": 165,
-        "b": 131
-      }
-    },
-    {
-      "radius": 5,
-      "posX": 0.0,
-      "posY": 9.5,
-      "posZ": -15,
-      "color": {
-        "r": 225,
-        "g": 179,
-        "b": 120
-      }
-    },
-    {
-      "radius": 5,
-      "posX": -5.5,
-      "posY": 5.0,
-      "posZ": -15.0,
-      "color": {
-        "r": 224,
-        "g": 204,
-        "b": 154
-      }
-    },
-    {
-      "radius": 5,
-      "posX": 5.5,
-      "posY": 5.0,
-      "posZ": -15.0,
-      "color": {
-        "r": 236,
-        "g": 121,
-        "b": 154
-      }
-    },
-    {
-      "radius": 5,
-      "posX": 0,
-      "posY": -2.5,
-      "posZ": -15.0,
-      "color": {
-        "r": 159,
-        "g": 2,
-        "b": 81
-      }
+      "filename": "in/cornellManifold.obj"
     }
   ],
   "camera": {
     "posX": 0.0,
-    "posY": 0.0,
-    "posZ": 20.0,
+    "posY": 24.0,
+    "posZ": 65.0,
     "dirX": 0.0,
     "dirY": 0.0,
     "dirZ": -1.0,
     "upX": 0.0,
     "upY": 1.0,
     "upZ": 0.0,
-    "focalLength": 1.0
+    "focalLength": 1.6,
+    "fov": 60  
   }
 } 

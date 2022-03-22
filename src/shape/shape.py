@@ -11,5 +11,5 @@ class Shape:
         pass
 
     @abstractmethod
-    def intersect(self) -> 'float':
+    def intersect(self):
         return
