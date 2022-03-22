@@ -1,22 +1,11 @@
 {
   "renderSettings": {
-    "xres": 480,
-    "yres": 480,
-    "samples": 50
+    "xres": 200,
+    "yres": 200,
+    "samples": 50,
+    "shader_type": "Lambert"
   },
-  "spheres": [
-    {
-      "radius": 5,
-      "posX": 10.0,
-      "posY": 30,
-      "posZ": 20,
-      "color": {
-        "r": 77,
-        "g": 137,
-        "b": 99
-      }
-    }
-  ],
+  "spheres": [],
   "meshes": [
     {
       "filename": "in/cornellManifold.obj"
@@ -33,6 +22,32 @@
     "upY": 1.0,
     "upZ": 0.0,
     "focalLength": 1.6,
-    "fov": 60  
-  }
-} 
+    "fov": 60
+  },
+  "lights": [
+    {
+      "type": "PointLight",
+      "posX": 20.0,
+      "posY": 45.0,
+      "posZ": -16.0,
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "intensity": 1.0
+    },
+    {
+      "type": "PointLight",
+      "posX": 0.0,
+      "posY": 24.0,
+      "posZ": 0.0,
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "intensity": 1.0
+    }
+  ]
+}

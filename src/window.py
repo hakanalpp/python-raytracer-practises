@@ -1,4 +1,4 @@
-# CENG 488 Assignment#1 by
+# CENG 488 Assignment#3 by
 # Hakan Alp
 # StudentId: 250201056
 # March 2022
@@ -15,109 +15,108 @@ from src.scene import Scene
 
 
 class PaintWidget(QWidget):
-	def __init__(self, width, height, parent=None):
-		super(PaintWidget, self).__init__(parent=parent)
-		self.width = width
-		self.height = height
+    def __init__(self, width, height, parent=None):
+        super(PaintWidget, self).__init__(parent=parent)
+        self.width = width
+        self.height = height
 
-		# setup an image buffer
-		self.imgBuffer = QImage(self.width, self.height, QImage.Format_ARGB32_Premultiplied)
-		self.imgBuffer.fill(QColor(0, 0, 0))
+        # setup an image buffer
+        self.imgBuffer = QImage(
+            self.width, self.height, QImage.Format_ARGB32_Premultiplied
+        )
+        self.imgBuffer.fill(QColor(0, 0, 0))
 
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setCompositionMode(QPainter.CompositionMode_Source)
+        painter.drawImage(0, 0, self.imgBuffer)
 
-	def paintEvent(self, event):
-		painter = QPainter(self)
-		painter.setCompositionMode(QPainter.CompositionMode_Source)
-		painter.drawImage(0, 0, self.imgBuffer)
-
-
-	def sizeHint(self):
-		return QSize(self.width, self.height)
+    def sizeHint(self):
+        return QSize(self.width, self.height)
 
 
 class MainWindow(QMainWindow):
-	def __init__(self, qApp, scene: 'Scene'):
-		super(MainWindow, self).__init__()
+    def __init__(self, qApp, scene: "Scene"):
+        super(MainWindow, self).__init__()
 
-		self.qApp = qApp
-		self.width = scene.resolution[0]
-		self.height = scene.resolution[1]
-		self.gfxScene = QGraphicsScene()
-		self.scene = scene
-		self.closed = False
+        self.qApp = qApp
+        self.width = scene.resolution[0]
+        self.height = scene.resolution[1]
+        self.gfxScene = QGraphicsScene()
+        self.scene = scene
+        self.closed = False
 
-	def closeEvent(self, event):
-		self.closed = True
+    def closeEvent(self, event):
+        self.closed = True
 
-	def setupUi(self):
-		if not self.objectName():
-			self.setObjectName(u"lala")
-		self.resize(self.width + 25, self.height + 30)
-		self.setWindowTitle("Hakan Alp - Assignment 1")
-		self.setStyleSheet("background-color:black;")
-		self.setAutoFillBackground(True)
+    def setupUi(self):
+        if not self.objectName():
+            self.setObjectName("lala")
+        self.resize(self.width + 25, self.height + 30)
+        self.setWindowTitle("Hakan Alp - Assignment 3")
+        self.setStyleSheet("background-color:black;")
+        self.setAutoFillBackground(True)
 
-		# set centralWidget
-		self.centralWidget = QWidget(self)
-		self.centralWidget.setObjectName(u"CentralWidget")
+        # set centralWidget
+        self.centralWidget = QWidget(self)
+        self.centralWidget.setObjectName("CentralWidget")
 
-		# create a layout to hold widgets
-		self.horizontalLayout = QHBoxLayout(self.centralWidget)
-		self.horizontalLayout.setObjectName(u"horizontalLayout")
-		self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        # create a layout to hold widgets
+        self.horizontalLayout = QHBoxLayout(self.centralWidget)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
 
-		# setup the gfxScene
-		self.gfxScene.setItemIndexMethod(QGraphicsScene.NoIndex)
+        # setup the gfxScene
+        self.gfxScene.setItemIndexMethod(QGraphicsScene.NoIndex)
 
-		# create a paint widget
-		self.paintWidget = PaintWidget(self.width, self.height)
-		self.paintWidget.setGeometry(QRect(0, 0, self.width, self.height))
-		self.paintWidgetItem = self.gfxScene.addWidget(self.paintWidget)
-		self.paintWidgetItem.setZValue(0)
+        # create a paint widget
+        self.paintWidget = PaintWidget(self.width, self.height)
+        self.paintWidget.setGeometry(QRect(0, 0, self.width, self.height))
+        self.paintWidgetItem = self.gfxScene.addWidget(self.paintWidget)
+        self.paintWidgetItem.setZValue(0)
 
-		# create a QGraphicsView as the main widget
-		self.gfxView = QGraphicsView(self.centralWidget)
-		self.gfxView.setObjectName(u"GraphicsView")
+        # create a QGraphicsView as the main widget
+        self.gfxView = QGraphicsView(self.centralWidget)
+        self.gfxView.setObjectName("GraphicsView")
 
-		# assign our scene to view
-		self.gfxView.setScene(self.gfxScene)
-		self.gfxView.setGeometry(QRect(0, 0, self.width, self.height))
+        # assign our scene to view
+        self.gfxView.setScene(self.gfxScene)
+        self.gfxView.setGeometry(QRect(0, 0, self.width, self.height))
 
-		# add widget to layout
-		self.horizontalLayout.addWidget(self.gfxView)
+        # add widget to layout
+        self.horizontalLayout.addWidget(self.gfxView)
 
-		# set central widget
-		self.setCentralWidget(self.centralWidget)
+        # set central widget
+        self.setCentralWidget(self.centralWidget)
 
-		# setup a status bar
-		self.statusBar = QStatusBar(self)
-		self.statusBar.setObjectName(u"StatusBar")
-		self.statusBar.setStyleSheet("background-color:gray;")
-		self.setStatusBar(self.statusBar)
-		self.statusBar.showMessage("Ready...")
+        # setup a status bar
+        self.statusBar = QStatusBar(self)
+        self.statusBar.setObjectName("StatusBar")
+        self.statusBar.setStyleSheet("background-color:gray;")
+        self.setStatusBar(self.statusBar)
+        self.statusBar.showMessage("Ready...")
 
+    def renderBuffer(self):
+        now = time.time()
+        self.statusBar.showMessage("Sending Camera rays...")
 
-	def renderBuffer(self):
-		now = time.time()
-		self.statusBar.showMessage("Sending Camera rays...")
+        # go through pixels
+        for y in range(0, self.height):
+            for x in range(0, self.width):
+                c = self.scene.send_ray(x, y)
+                self.paintWidget.imgBuffer.setPixelColor(x, y, c.to_qcolor())
+            self.updateBuffer()
+            self.qApp.processEvents()
 
-		# go through pixels
-		for y in range(0, self.height):
-			for x in range(0, self.width):
-				self.paintWidget.imgBuffer.setPixelColor(x, y, self.scene.send_ray(x,y).to_qcolor())
-			self.updateBuffer()
-			self.qApp.processEvents()
+            self.statusBar.showMessage(f"{self.scene.sentRayCount} camera rays sent.")
 
-			self.statusBar.showMessage(f"{self.scene.sentRayCount} camera rays sent.")
+            if self.closed:
+                sys.exit(0)
 
-			if(self.closed):
-				sys.exit(0)
+        diff = time.time() - now
+        self.statusBar.showMessage(
+            f"{self.scene.sentRayCount} camera rays sent in {diff:.2f} seconds..."
+        )
 
-		diff = time.time() - now
-		self.statusBar.showMessage(f'{self.scene.sentRayCount} camera rays sent in {diff:.2f} seconds...')
-
-	def updateBuffer(self):
-		self.paintWidget.update()
-
-
-
+    def updateBuffer(self):
+        self.paintWidget.update()

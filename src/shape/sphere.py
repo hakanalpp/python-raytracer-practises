@@ -1,4 +1,4 @@
-# CENG 488 Assignment#1 by
+# CENG 488 Assignment#3 by
 # Hakan Alp
 # StudentId: 250201056
 # March 2022
@@ -17,7 +17,7 @@ class Sphere(Shape):
         self.radius: "float" = radius
         self.color: "RGBA" = RGBA(r, g, b, 255)
 
-    def intersect(self, ray: 'Ray'):
+    def intersect(self, ray: 'Ray'): # TODO
         oc = ray.position - self.position
         a = ray.direction.dot(ray.direction)
         b = 2.0 * oc.dot(ray.direction)
