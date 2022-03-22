@@ -1,4 +1,4 @@
-# CENG 488 Assignment#1 by
+# CENG 488 Assignment#2 by
 # Hakan Alp
 # StudentId: 250201056
 # March 2022
@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
 		if not self.objectName():
 			self.setObjectName(u"lala")
 		self.resize(self.width + 25, self.height + 30)
-		self.setWindowTitle("Hakan Alp - Assignment 1")
+		self.setWindowTitle("Hakan Alp - Assignment 2")
 		self.setStyleSheet("background-color:black;")
 		self.setAutoFillBackground(True)
 

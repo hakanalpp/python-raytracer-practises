@@ -1,4 +1,4 @@
-# CENG 488 Assignment#1 by
+# CENG 488 Assignment#2 by
 # Hakan Alp
 # StudentId: 250201056
 # March 2022
