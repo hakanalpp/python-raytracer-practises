@@ -3,6 +3,7 @@
 # StudentId: 250201056
 # March 2022
 
+from ..shading.shader import Shader
 from ..ray.ray import Ray
 from ..math.vector import RGBA, HCoord, Point3f, Vector3f
 from .shape import Shape
@@ -15,7 +16,9 @@ class Mesh(Shape):
         faces: "list[list[int]]",
         normals: "list[Vector3f]",
         colors: "list[RGBA]",
+        shader: 'Shader'
     ) -> "Mesh":
+        super(Mesh, self).__init__(shader)
         self.vertices: "list[Point3f]" = vertices
         self.faces: "list[list[int]]" = faces
         self.normals: "list[Vector3f]" = normals

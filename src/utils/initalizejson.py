@@ -47,10 +47,6 @@ def initalize_scene(filename) -> "Scene":
             )
         )
 
-    for o in obj["meshes"]:
-        specs = generate_vertices_with_tn(o["filename"])
-        objects.append(Mesh(specs[0], specs[1], specs[2], specs[3]))
-
     lights = []
     for l in obj["lights"]:
         if l["type"] == "PointLight":
@@ -66,10 +62,13 @@ def initalize_scene(filename) -> "Scene":
                 )
             )
 
-    shader = None
-    if settings["shader_type"] == "Lambert":
-        shader = LambertShader(lights)
+    for o in obj["meshes"]:
+        specs = generate_vertices_with_tn(o["filename"])
+        shader = None
+        if o["shader_type"] == "Lambert":
+            shader = LambertShader(lights)
+        objects.append(Mesh(specs[0], specs[1], specs[2], specs[3], shader))
 
     return Scene(
-        settings["xres"], settings["yres"], camera, objects, settings["samples"], shader
+        settings["xres"], settings["yres"], camera, objects, settings["worker_count"], settings["samples"], shader
     )

@@ -40,11 +40,15 @@ class Camera:
         self.midPoint = self.position + self.direction * self.focalLength
         self.aspectRatio = resX / resY
 
-    def getRay(self, x, y):  # newX and newY are between -1 and 1
+    def calculateRay(self, x, y):
         newX = (2 * ((x + 0.5) / self.res[0]) - 1) * self.aspectRatio * self.fov
         newY = (1 - 2 * ((y + 0.5) / self.res[1])) * self.fov
 
         k = self.midPoint + (newX * self.right) + (newY * (self.up))
         m: "Vector3f" = k - self.position
 
-        return Ray("Camera", self.position, m.normalize())
+        return (self.position, m.normalize())
+
+    def getRay(self, x, y):  # newX and newY are between -1 and 1
+        r = self.calculateRay(x, y)
+        return Ray("Camera", r[0], r[1])

@@ -4,12 +4,12 @@
 # March 2022
 
 import sys
+import threading
 import time
 
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
-from src.math.vector import RGBA
 
 from src.scene import Scene
 
@@ -24,15 +24,19 @@ class PaintWidget(QWidget):
         self.imgBuffer = QImage(
             self.width, self.height, QImage.Format_ARGB32_Premultiplied
         )
-        self.imgBuffer.fill(QColor(0, 0, 0))
+        self.imgBuffer.fill(QColor(120, 0, 0))
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setCompositionMode(QPainter.CompositionMode_Source)
         painter.drawImage(0, 0, self.imgBuffer)
+        # print(self.imgBuffer.pixelColor(150,150))
 
     def sizeHint(self):
         return QSize(self.width, self.height)
+
+
+
 
 
 class MainWindow(QMainWindow):
@@ -46,8 +50,35 @@ class MainWindow(QMainWindow):
         self.scene = scene
         self.closed = False
 
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(lambda *_: self.xxx())
+        self.timer.start()
+
+    def xxx(self):
+        print("tick")
+        self.updateBuffer()
+
+
+    def renderBuffer(self):
+        now = time.time()
+        self.statusBar.showMessage("Sending rays...")
+        print("m", threading.get_ident() )
+
+        self.rendererThread.start()
+        # print(self.paintWidget.imgBuffer.pixelColor(150,150))
+        # for y in range(0, self.height):
+        #     for x in range(0, self.width):
+        #         self.communicate.number.emit(Output(x,y,120,0,0))
+
+        diff = time.time() - now
+        self.statusBar.showMessage(
+            f"{self.scene.sentRayCount} rays sent in {diff:.2f} seconds..."
+        )
+
     def closeEvent(self, event):
         self.closed = True
+
 
     def setupUi(self):
         if not self.objectName():
@@ -95,28 +126,11 @@ class MainWindow(QMainWindow):
         self.statusBar.setStyleSheet("background-color:gray;")
         self.setStatusBar(self.statusBar)
         self.statusBar.showMessage("Ready...")
+        self.scene.renderer.imgBuffer = self.paintWidget.imgBuffer
 
-    def renderBuffer(self):
-        now = time.time()
-        self.statusBar.showMessage("Sending rays...")
-
-        # go through pixels
-        for y in range(0, self.height):
-            for x in range(0, self.width):
-                c = self.scene.send_ray(x, y)
-                self.paintWidget.imgBuffer.setPixelColor(x, y, c.to_qcolor())
-            self.updateBuffer()
-            self.qApp.processEvents()
-
-            self.statusBar.showMessage(f"{self.scene.sentRayCount} rays sent.")
-
-            if self.closed:
-                sys.exit(0)
-
-        diff = time.time() - now
-        self.statusBar.showMessage(
-            f"{self.scene.sentRayCount} rays sent in {diff:.2f} seconds..."
-        )
+        self.rendererThread = QThread()
+        self.rendererThread.started.connect(self.scene.renderer.render)
+        self.scene.renderer.moveToThread(self.rendererThread)
 
     def updateBuffer(self):
         self.paintWidget.update()

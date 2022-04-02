@@ -4,11 +4,11 @@
 # March 2022
 
 from abc import abstractmethod
-
+from ..shading.shader import Shader
 
 class Shape:
-    def __init__(self):
-        pass
+    def __init__(self, shader):
+        self.shader: 'Shader' = shader
 
     @abstractmethod
     def intersect(self):

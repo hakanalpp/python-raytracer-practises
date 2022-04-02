@@ -3,12 +3,13 @@
     "xres": 200,
     "yres": 200,
     "samples": 50,
-    "shader_type": "Lambert"
+    "worker_count": 8
   },
   "spheres": [],
   "meshes": [
     {
-      "filename": "in/cornellManifold.obj"
+      "filename": "in/cornellManifold.obj",
+      "shader_type": "Lambert"
     }
   ],
   "camera": {
