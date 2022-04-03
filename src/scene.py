@@ -66,7 +66,7 @@ class Scene(QObject):
                 self.updateImgBuffer(tid, r, g, b)
                 if self.eventCounter % (self.resolution[0] * 10) == 0:
                     self.signals.status_message.emit(
-                        f"{self.eventCounter + self.sentRayCount} rays sent in {time.time()-now:.2f} seconds"
+                        f"[{self.workerCount} Workers] {self.eventCounter + self.sentRayCount} rays sent in {time.time()-now:.2f} seconds"
                     )
             except queue.Empty:
                 time.sleep(0.0001)
@@ -81,7 +81,7 @@ class Scene(QObject):
             w[0].join()
 
         self.signals.status_message.emit(
-            f"{len(self.tasks) + self.sentRayCount} rays sent in {time.time()-now:.2f} seconds..."
+            f"[{self.workerCount} Workers] {len(self.tasks) + self.sentRayCount} rays sent in {time.time()-now:.2f} seconds..."
         )
         self.threadKilled = True
         return self.threadKilled
