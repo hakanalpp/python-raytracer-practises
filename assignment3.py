@@ -20,6 +20,5 @@ if __name__ == "__main__":
 	mainWindow = MainWindow(qApp, scene)
 	mainWindow.setupUi()
 	mainWindow.show()
-	mainWindow.renderBuffer()
 
-	sys.exit(qApp.exec_())
+	exit(qApp.exec_())

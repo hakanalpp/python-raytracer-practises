@@ -70,5 +70,5 @@ def initalize_scene(filename) -> "Scene":
         objects.append(Mesh(specs[0], specs[1], specs[2], specs[3], shader))
 
     return Scene(
-        settings["xres"], settings["yres"], camera, objects, settings["worker_count"], settings["samples"], shader
+        settings["xres"], settings["yres"], camera, objects, settings["worker_count"]
     )
