@@ -3,7 +3,7 @@
 # StudentId: 250201056
 # March 2022
 
-from ..math.vector import *
+from .vector import *
 
 
 class Ray:

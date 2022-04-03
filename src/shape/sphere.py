@@ -5,8 +5,7 @@
 
 from math import sqrt
 
-from ..ray.ray import Ray
-from ..math.vector import RGBA, Point3f
+from ..math import RGBA, Point3f, Ray
 from .shape import Shape
 
 
@@ -30,3 +29,6 @@ class Sphere(Shape):
         t0 = (-b + discriminant)/(2*a)
         t1 = (-b - discriminant)/(2*a) 
         return [min(t0,t1), self.color]
+
+    def calculate_bounding_box(self):
+        return super().calculate_bounding_box()

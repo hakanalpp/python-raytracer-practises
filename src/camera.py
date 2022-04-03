@@ -4,8 +4,7 @@
 # March 2022
 
 from math import pi, tan
-from .math.vector import Point3f, Vector3f
-from .ray.ray import Ray
+from .math import Point3f, Vector3f, Ray
 
 
 class Camera:

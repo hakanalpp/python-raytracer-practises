@@ -67,7 +67,10 @@ def initalize_scene(filename) -> "Scene":
         shader = None
         if o["shader_type"] == "Lambert":
             shader = LambertShader(lights)
-        objects.append(Mesh(specs[0], specs[1], specs[2], specs[3], shader))
+        t = "default"
+        if "obj_type" in o:
+            t = o["obj_type"]
+        objects.append(Mesh(specs[0], specs[1], specs[2], specs[3], shader, t))
 
     return Scene(
         settings["xres"], settings["yres"], camera, objects, settings["worker_count"]

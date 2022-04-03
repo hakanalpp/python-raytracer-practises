@@ -5,5 +5,6 @@
 
 from .matrix import Matrix
 from .vector import Point3f, Vector3f, RGBA, HCoord
+from .ray import Ray
 
-__all__ = [Matrix, Point3f, Vector3f, RGBA, HCoord]
+__all__ = [Matrix, Point3f, Vector3f, RGBA, HCoord, Ray]

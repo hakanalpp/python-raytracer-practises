@@ -71,7 +71,7 @@ class Scene(QObject):
             w[0].join()
 
         self.signals.status_message.emit(
-            f"{len(self.tasks)} rays sent in {time.time()-now:.2f} seconds..."
+            f"{len(self.tasks)} camera rays sent in {time.time()-now:.2f} seconds..."
         )
         self.threadKilled = True
         return self.threadKilled

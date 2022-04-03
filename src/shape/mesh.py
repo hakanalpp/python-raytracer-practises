@@ -3,8 +3,9 @@
 # StudentId: 250201056
 # March 2022
 
+from math import inf
 from ..shading.shader import Shader
-from ..ray.ray import Ray
+from ..math.ray import Ray
 from ..math.vector import RGBA, HCoord, Point3f, Vector3f
 from .shape import Shape
 
@@ -16,13 +17,15 @@ class Mesh(Shape):
         faces: "list[list[int]]",
         normals: "list[Vector3f]",
         colors: "list[RGBA]",
-        shader: 'Shader'
+        shader: "Shader",
+        type: str = "default",
     ) -> "Mesh":
-        super(Mesh, self).__init__(shader)
+        super(Mesh, self).__init__(shader, type)
         self.vertices: "list[Point3f]" = vertices
         self.faces: "list[list[int]]" = faces
         self.normals: "list[Vector3f]" = normals
         self.colors: "list[RGBA]" = colors
+        self.calculate_bounding_box()
 
     def intersect(
         self, ray: "Ray"
@@ -81,3 +84,24 @@ class Mesh(Shape):
             return [-1, -1]  # P is on the wrong side
 
         return [HCoord.get_length_between_points(ray.position, P), P]
+
+    def calculate_bounding_box(self):
+        self.bounding_box.min = Point3f(inf, inf, inf)
+        self.bounding_box.max = Point3f(-inf, -inf, -inf)
+
+        for face in self.faces:
+            for p in face:
+                v = self.vertices[p]
+                if v.x > self.bounding_box.max.x:
+                    self.bounding_box.max.x = v.x
+                if v.y > self.bounding_box.max.y:
+                    self.bounding_box.max.y = v.y
+                if v.z > self.bounding_box.max.z:
+                    self.bounding_box.max.z = v.z
+
+                if v.x < self.bounding_box.min.x:
+                    self.bounding_box.min.x = v.x
+                if v.y < self.bounding_box.min.y:
+                    self.bounding_box.min.y = v.y
+                if v.z < self.bounding_box.min.z:
+                    self.bounding_box.min.z = v.z
