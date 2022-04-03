@@ -62,16 +62,17 @@ def initalize_scene(filename) -> "Scene":
                 )
             )
 
+    lambert_shader = LambertShader(lights)
     for o in obj["meshes"]:
         specs = generate_vertices_with_tn(o["filename"])
         shader = None
         if o["shader_type"] == "Lambert":
-            shader = LambertShader(lights)
+            shader = lambert_shader
         t = "default"
         if "obj_type" in o:
             t = o["obj_type"]
         objects.append(Mesh(specs[0], specs[1], specs[2], specs[3], shader, t))
 
     return Scene(
-        settings["xres"], settings["yres"], camera, objects, settings["worker_count"]
+        settings["xres"], settings["yres"], camera, objects, lights, settings["worker_count"]
     )

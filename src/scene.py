@@ -11,6 +11,7 @@ from multiprocessing import Queue
 import time
 import queue
 
+from .light.light import Light
 from .renderer.worker import Worker
 from .camera import Camera
 from .shape.shape import Shape
@@ -18,11 +19,12 @@ from .renderer.task import Task
 
 
 class Scene(QObject):
-    def __init__(self, xRes, yRes, camera, objects, workerCount):
+    def __init__(self, xRes, yRes, camera, objects, lights, workerCount):
         super().__init__()
         self.resolution: "tuple(int, int)" = (xRes, yRes)
         self.camera: "Camera" = camera
         self.objects: "list[Shape]" = objects
+        self.lights: "list[Light]" = lights
         self.sentRayCount = 0
 
         self.workerCount = workerCount
@@ -39,7 +41,9 @@ class Scene(QObject):
 
     def render(self):
         now = time.time()
+        lc = len(self.lights)
         self.signals.status_message.emit("Preparing Task Queue...")
+
         self.prepare_task_queue()
         self.signals.status_message.emit("Sending rays...")
 
@@ -56,8 +60,14 @@ class Scene(QObject):
             try:
                 tid, r, g, b = self.eventQueue.get_nowait()
                 self.eventCounter += 1
+                if r != 0 or g != 0 or b != 0:
+                    self.sentRayCount += lc
 
                 self.updateImgBuffer(tid, r, g, b)
+                if self.eventCounter % (self.resolution[0] * 10) == 0:
+                    self.signals.status_message.emit(
+                        f"{self.eventCounter + self.sentRayCount} rays sent in {time.time()-now:.2f} seconds"
+                    )
             except queue.Empty:
                 time.sleep(0.0001)
                 pass
@@ -71,7 +81,7 @@ class Scene(QObject):
             w[0].join()
 
         self.signals.status_message.emit(
-            f"{len(self.tasks)} camera rays sent in {time.time()-now:.2f} seconds..."
+            f"{len(self.tasks) + self.sentRayCount} rays sent in {time.time()-now:.2f} seconds..."
         )
         self.threadKilled = True
         return self.threadKilled
