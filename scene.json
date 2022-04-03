@@ -1,7 +1,7 @@
 {
   "renderSettings": {
-    "xres": 400,
-    "yres": 400,
+    "xres": 512,
+    "yres": 512,
     "worker_count": 6
   },
   "spheres": [],
