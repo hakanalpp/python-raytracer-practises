@@ -1,7 +1,7 @@
-# CENG 488 Assignment#3 by
+# CENG 488 Assignment#4 by
 # Hakan Alp
 # StudentId: 250201056
-# March 2022
+# April 2022
 
 from ..light.point_light import PointLight
 from ..shading.lambert_shader import LambertShader
