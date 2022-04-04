@@ -8,7 +8,7 @@ from ..shading.lambert_shader import LambertShader
 from .obj_parser import generate_vertices_with_tn
 from ..camera import Camera
 from ..scene import Scene
-from ..shape import Sphere, Mesh
+from ..shape import Sphere, Mesh, Material
 from .readjson import readJson
 
 
@@ -62,6 +62,19 @@ def initalize_scene(filename) -> "Scene":
                 )
             )
 
+    materials = []
+    for m in obj["materials"]:
+        materials.append(
+            Material(
+                m["name"],
+                m["reflection"],
+                m["refraction"],
+            )
+        )
+
+    default_material = Material("default", 0, 0)
+    material_names = list(map(lambda x: x.name, materials))
+
     lambert_shader = LambertShader(lights)
     for o in obj["meshes"]:
         specs = generate_vertices_with_tn(o["filename"])
@@ -71,8 +84,19 @@ def initalize_scene(filename) -> "Scene":
         t = "default"
         if "obj_type" in o:
             t = o["obj_type"]
-        objects.append(Mesh(specs[0], specs[1], specs[2], specs[3], shader, t))
+
+        material = default_material
+        if "material" in o and o["material"] in material_names:
+            material = materials[material_names.index(o["material"])]
+
+        objects.append(Mesh(specs[0], specs[1], specs[2], specs[3], material, shader, t))
 
     return Scene(
-        settings["xres"], settings["yres"], camera, objects, lights, settings["worker_count"]
+        settings["xres"],
+        settings["yres"],
+        camera,
+        objects,
+        lights,
+        settings["worker_count"],
+        settings["bounce_count"],
     )

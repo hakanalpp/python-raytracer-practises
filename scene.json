@@ -2,10 +2,23 @@
   "renderSettings": {
     "xres": 400,
     "yres": 400,
-    "worker_count": 6
+    "worker_count": 6,
+    "bounce_count": 5
   },
   "spheres": [],
+  "materials": [
+    {
+      "name": "mirror",
+      "reflection": 1.0,
+      "refraction": 0.0
+    }
+  ],
   "meshes": [
+    {
+      "filename": "in/rightTopMirror.obj",
+      "shader_type": "Lambert",
+      "material": "mirror"
+    },
     {
       "filename": "in/shortBox.obj",
       "shader_type": "Lambert"

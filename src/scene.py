@@ -19,12 +19,13 @@ from .renderer.task import Task
 
 
 class Scene(QObject):
-    def __init__(self, xRes, yRes, camera, objects, lights, workerCount):
+    def __init__(self, xRes, yRes, camera, objects, lights, workerCount, bounceCount):
         super().__init__()
         self.resolution: "tuple(int, int)" = (xRes, yRes)
         self.camera: "Camera" = camera
         self.objects: "list[Shape]" = objects
         self.lights: "list[Light]" = lights
+        self.bounceCount = bounceCount
         self.sentRayCount = 0
 
         self.workerCount = workerCount
@@ -104,7 +105,7 @@ class Scene(QObject):
             for x in range(0, self.resolution[1]):
                 r = self.camera.calculateRay(x, y)
                 t = Task(
-                    c, r[0].x, r[0].y, r[0].z, r[1].x, r[1].y, r[1].z, x, y, 0, 0, 0
+                    c, self.bounceCount, r[0].x, r[0].y, r[0].z, r[1].x, r[1].y, r[1].z, x, y, 0, 0, 0
                 )
 
                 self.taskQueue.put(t)

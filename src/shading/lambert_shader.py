@@ -14,7 +14,7 @@ class LambertShader(Shader):
         for l in self.lights:
             distance = HCoord.get_length_between_points(hitPoint, l.position)
             l_factor = 0.2
-            ray = Ray("light", l.position, (hitPoint - l.position).normalize())
+            ray = Ray("light", l.position, (hitPoint - l.position).normalize(), 0)
             flag = False
             for obj in objects:
                 if obj.type == "lightbox":

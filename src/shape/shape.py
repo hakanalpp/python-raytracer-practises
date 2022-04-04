@@ -5,11 +5,14 @@
 
 from abc import abstractmethod
 
+from ..shape.material import Material
+
 from .bounding_box import AABB
 from ..shading.shader import Shader
 
 class Shape:
-    def __init__(self, shader, type = "default"):
+    def __init__(self, material, shader, type = "default"):
+        self.material: 'Material' = material
         self.shader: 'Shader' = shader
         self.bounding_box: 'AABB' = AABB()
         self.type = type

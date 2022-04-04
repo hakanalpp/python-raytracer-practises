@@ -4,6 +4,7 @@ from ctypes import *
 class Task(Structure):
     _fields_ = [
         ("id", c_int),
+        ("bounce", c_int),
         ("pointX", c_float),
         ("pointY", c_float),
         ("pointZ", c_float),

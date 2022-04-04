@@ -48,6 +48,6 @@ class Camera:
 
         return (self.position, m.normalize())
 
-    def getRay(self, x, y):  # newX and newY are between -1 and 1
-        r = self.calculateRay(x, y)
-        return Ray("Camera", r[0], r[1])
+    # def getRay(self, x, y):  # not used anymore
+    #     r = self.calculateRay(x, y)
+    #     return Ray("Camera", r[0], r[1], 0)

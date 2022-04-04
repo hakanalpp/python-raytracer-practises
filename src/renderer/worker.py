@@ -2,8 +2,6 @@ from multiprocessing import Value
 import queue
 
 from ..shape.shape import Shape
-
-
 from ..math import Point3f, Vector3f, Ray
 
 
@@ -44,6 +42,7 @@ class Worker:
                 "Camera",
                 Point3f(t.pointX, t.pointY, t.pointZ),
                 Vector3f(t.dirX, t.dirY, t.dirZ),
+                t.bounce
             )
             bb_dist = obj.bounding_box.intersect(r)
             if bb_dist == -1 or bb_dist > dist:
@@ -56,7 +55,7 @@ class Worker:
                 dist = temp_dist
                 color = temp_color
             index += 1
-
+        
         if selected_index != -1:
             new_c = self.objects[selected_index].shader.calculate_light(
                 self.objects, hitPoint, selected_normal
