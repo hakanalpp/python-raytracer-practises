@@ -6,5 +6,6 @@
 from .mesh import Mesh
 from .sphere import Sphere
 from .material import Material
+from .shape import Shape
 
-__all__ = [Mesh, Sphere, Material]
+__all__ = [Shape, Mesh, Sphere, Material]

@@ -33,20 +33,6 @@ def initalize_scene(filename) -> "Scene":
         settings["yres"],
     )
 
-    objects = []
-    for s in obj["spheres"]:
-        objects.append(
-            Sphere(
-                s["posX"],
-                s["posY"],
-                s["posZ"],
-                s["radius"],
-                s["color"]["r"],
-                s["color"]["g"],
-                s["color"]["b"],
-            )
-        )
-
     lights = []
     for l in obj["lights"]:
         if l["type"] == "PointLight":
@@ -76,20 +62,51 @@ def initalize_scene(filename) -> "Scene":
     material_names = list(map(lambda x: x.name, materials))
 
     lambert_shader = LambertShader(lights)
+
+    objects = []
+    for s in obj["spheres"]:
+        shader = None
+        if s["shader_type"] == "Lambert":
+            shader = lambert_shader
+        t = "default"
+        if "type" in s:
+            t = s["type"]
+
+        material = default_material
+        if "material" in s and s["material"] in material_names:
+            material = materials[material_names.index(s["material"])]
+            
+        objects.append(
+            Sphere(
+                s["posX"],
+                s["posY"],
+                s["posZ"],
+                s["radius"],
+                s["color"]["r"]/255,
+                s["color"]["g"]/255,
+                s["color"]["b"]/255,
+                material,
+                shader,
+                t,
+            )
+        )
+
     for o in obj["meshes"]:
         specs = generate_vertices_with_tn(o["filename"])
         shader = None
         if o["shader_type"] == "Lambert":
             shader = lambert_shader
         t = "default"
-        if "obj_type" in o:
-            t = o["obj_type"]
+        if "type" in o:
+            t = o["type"]
 
         material = default_material
         if "material" in o and o["material"] in material_names:
             material = materials[material_names.index(o["material"])]
 
-        objects.append(Mesh(specs[0], specs[1], specs[2], specs[3], material, shader, t))
+        objects.append(
+            Mesh(specs[0], specs[1], specs[2], specs[3], material, shader, t)
+        )
 
     return Scene(
         settings["xres"],

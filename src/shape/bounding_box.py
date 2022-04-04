@@ -5,7 +5,7 @@
 
 from ..math import Vector3f, Ray
 
-
+# Bounding Box is implemented by Gokberk Akdeniz
 class AABB:
     def __init__(self):
         self.min = Vector3f(0, 0, 0)

@@ -5,62 +5,11 @@
     "worker_count": 6,
     "bounce_count": 5
   },
-  "spheres": [],
-  "materials": [
-    {
-      "name": "mirror",
-      "reflection": 1.0,
-      "refraction": 0.0
-    }
-  ],
-  "meshes": [
-    {
-      "filename": "in/rightTopMirror.obj",
-      "shader_type": "Lambert",
-      "material": "mirror"
-    },
-    {
-      "filename": "in/shortBox.obj",
-      "shader_type": "Lambert"
-    },
-    {
-      "filename": "in/tallBox.obj",
-      "shader_type": "Lambert"
-    },
-    {
-      "filename": "in/ceiling.obj",
-      "shader_type": "Lambert"
-    },
-    {
-      "filename": "in/rightWall.obj",
-      "shader_type": "Lambert"
-    },
-    {
-      "filename": "in/floor.obj",
-      "shader_type": "Lambert"
-    },
-    {
-      "filename": "in/backWall.obj",
-      "shader_type": "Lambert"
-    },
-    {
-      "filename": "in/leftWall.obj",
-      "shader_type": "Lambert"
-    },
-    {
-      "filename": "in/lightBox1.obj",
-      "shader_type": "Lambert"
-    },
-    {
-      "filename": "in/lightBox2.obj",
-      "shader_type": "Lambert"
-    }
-  ],
   "camera": {
-    "posX": 0.0,
+    "posX": 17.0,
     "posY": 24.0,
-    "posZ": 65.0,
-    "dirX": 0.0,
+    "posZ": 50.0,
+    "dirX": -0.4,
     "dirY": 0.0,
     "dirZ": -1.0,
     "upX": 0.0,
@@ -69,6 +18,28 @@
     "focalLength": 1.6,
     "fov": 60
   },
+  "materials": [
+    {
+      "name": "mirror",
+      "reflection": 1.0,
+      "refraction": 0.0
+    },
+    {
+      "name": "partial_mirror",
+      "reflection": 0.7,
+      "refraction": 0.0
+    },
+    {
+      "name": "half_mirror",
+      "reflection": 0.5,
+      "refraction": 0.0
+    },
+    {
+      "name": "quarter_mirror",
+      "reflection": 0.2,
+      "refraction": 0.0
+    }
+  ],
   "lights": [
     {
       "type": "PointLight",
@@ -93,6 +64,60 @@
         "b": 1
       },
       "intensity": 1.0
+    }
+  ],
+  "spheres": [
+    {
+      "shader_type": "Lambert",
+      "radius": 5,
+      "posX": 0.0,
+      "posY": 30,
+      "posZ": -10,
+      "color": {
+        "r": 255,
+        "g": 0,
+        "b": 0
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "filename": "in/shortBox.obj",
+      "shader_type": "Lambert"
+    },
+    {
+      "filename": "in/tallBox.obj",
+      "shader_type": "Lambert"
+    },
+    {
+      "filename": "in/ceiling.obj",
+      "shader_type": "Lambert"
+    },
+    {
+      "filename": "in/rightWall.obj",
+      "shader_type": "Lambert"
+    },
+    {
+      "filename": "in/floor.obj",
+      "shader_type": "Lambert",
+      "material": "quarter_mirror"
+    },
+    {
+      "filename": "in/backWall.obj",
+      "shader_type": "Lambert",
+      "material": "partial_mirror"
+    },
+    {
+      "filename": "in/leftWall.obj",
+      "shader_type": "Lambert"
+    },
+    {
+      "filename": "in/lightBox1.obj",
+      "shader_type": "Lambert"
+    },
+    {
+      "filename": "in/lightBox2.obj",
+      "shader_type": "Lambert"
     }
   ]
 }

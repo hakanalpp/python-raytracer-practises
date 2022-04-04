@@ -73,7 +73,7 @@ class Scene(QObject):
                 time.sleep(0.0001)
                 pass
             except Exception as e:
-                print("Exception: ", e)
+                print("Scene Exception: ", e)
 
         for w in self.workers.values():
             w[1].stopp()
@@ -95,7 +95,7 @@ class Scene(QObject):
         return res and self.threadKilled
 
     def updateImgBuffer(self, tid, r, g, b):
-        c = qRgb(r, g, b)
+        c = qRgb(r*255, g*255, b*255) # Find a way to get it between 0-1
         ev = self.tasks[tid]
         self.imgBuffer.setPixel(ev.x, ev.y, c)
 

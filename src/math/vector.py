@@ -117,7 +117,7 @@ class HCoord:
     def get_normal_vector(p1: "Point3f", p2: "Point3f", p3: "Point3f") -> "Vector3f":
         m1 = p2 - p1
         m2 = p3 - p2
-        return m1.normalize().crossProduct(m2.normalize())
+        return m1.normalize().crossProduct(m2.normalize()).normalize()
 
     @staticmethod
     def get_length_between_points(p1, p2) -> "float":
@@ -140,20 +140,3 @@ class Point3f(HCoord):
         return Point3f(self.x + other.x, self.y + other.y, self.z + other.z)
 
 
-class RGBA(HCoord):
-    def __init__(self, r, g, b, a):
-        r = min(r, 255)
-        g = min(g, 255)
-        b = min(b, 255)
-        a = min(a, 255)
-        HCoord.__init__(self, r, g, b, a)
-        self.r = self.x
-        self.g = self.y
-        self.b = self.z
-        self.a = self.w
-
-    def asList(self, faceCount):
-        return [self.r, self.g, self.b, self.a] * faceCount
-
-    def to_qcolor(self):
-        return QColor(self.r, self.g, self.b)

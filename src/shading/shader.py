@@ -1,7 +1,7 @@
 
 from abc import abstractmethod
 
-from ..light.light import Light
+from ..light import Light
 
 
 class Shader:

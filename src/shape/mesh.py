@@ -5,11 +5,10 @@
 
 from math import inf
 
-from ..shape.material import Material
 from ..shading.shader import Shader
-from ..math.ray import Ray
-from ..math.vector import RGBA, HCoord, Point3f, Vector3f
+from ..math import RGBA, HCoord, Point3f, Vector3f, Ray
 from .shape import Shape
+from .material import Material
 
 
 class Mesh(Shape):
@@ -56,7 +55,7 @@ class Mesh(Shape):
     def intersect_with_face(self, ray: "Ray", face: "list[int]", normal: "Vector3f"):
         nDotRayDirection = normal.dot(ray.direction)
         if (
-            abs(nDotRayDirection) < 0.0000000000000000000001 or nDotRayDirection > 0.0
+            abs(nDotRayDirection) < 10e-12 or nDotRayDirection > 0.0
         ):  # Parallel or almost parallel or negative way
             return [-1, -1]
         v = self.vertices

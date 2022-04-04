@@ -13,12 +13,12 @@
     {
       "filename": "in/lightBox1.obj",
       "shader_type": "Lambert",
-      "obj_type": "lightbox"
+      "obj_type": "shadowless"
     },
     {
       "filename": "in/lightBox2.obj",
       "shader_type": "Lambert",
-      "obj_type": "lightbox"
+      "obj_type": "shadowless"
     }
   ],
   "camera": {

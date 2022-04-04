@@ -8,3 +8,9 @@ class Material:
         self.reflection = reflection
         self.refraction = refraction
         self.diffuse = 1 - reflection if reflection > 0 else 1 - refraction
+
+    def shouldBounce(self) -> bool:
+        return self.reflection > 0 or self.refraction > 0
+
+    def shouldReflect(self) -> bool:
+        return self.reflection > 0
