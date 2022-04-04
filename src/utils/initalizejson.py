@@ -50,13 +50,14 @@ def initalize_scene(filename) -> "Scene":
 
     materials = []
     for m in obj["materials"]:
-        materials.append(
-            Material(
-                m["name"],
-                m["reflection"],
-                m["refraction"],
-            )
+        mat = Material(
+            m["name"],
+            m["reflection"],
+            m["refraction"],
         )
+        if "refractive_index" in m:
+            mat.refractive_index = m["refractive_index"]
+        materials.append(mat)
 
     default_material = Material("default", 0, 0)
     material_names = list(map(lambda x: x.name, materials))
@@ -75,16 +76,16 @@ def initalize_scene(filename) -> "Scene":
         material = default_material
         if "material" in s and s["material"] in material_names:
             material = materials[material_names.index(s["material"])]
-            
+
         objects.append(
             Sphere(
                 s["posX"],
                 s["posY"],
                 s["posZ"],
                 s["radius"],
-                s["color"]["r"]/255,
-                s["color"]["g"]/255,
-                s["color"]["b"]/255,
+                s["color"]["r"] / 255,
+                s["color"]["g"] / 255,
+                s["color"]["b"] / 255,
                 material,
                 shader,
                 t,

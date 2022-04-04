@@ -45,7 +45,11 @@ class Sphere(Shape):
         t0 = (-b + discriminant) / (2 * a)
         t1 = (-b - discriminant) / (2 * a)
         
+        if t0 < 0.1 or t1 < 0.1:
+            return [-1, None, None, None]
+
         t_min = min(t0, t1)
+
         hitPoint = ray.position + (ray.direction.normalize() * t_min)
         normal = (hitPoint - self.position).normalize()
         return [t_min, self.color, normal, hitPoint]

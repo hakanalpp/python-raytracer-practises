@@ -57,7 +57,7 @@ class HCoord:
     def __neg__(self) -> "HCoord":
         return HCoord(-self.x, -self.y, -self.z, -self.w)
 
-    def __mul__(self, i2):
+    def __mul__(self, i2):  # TODO refactor this in feature.
         if isinstance(i2, self.__class__):  # dot product
             return self.dot(i2)
         elif isinstance(i2, int) or isinstance(i2, float):  # scalar multiplication
@@ -77,6 +77,11 @@ class HCoord:
             self.z * v2.x - self.x * v2.z,
             self.x * v2.y - self.y * v2.x,
             self.w,
+        )
+
+    def divide_scalar(self, scalar) -> "HCoord":
+        return self.__class__(
+            self.x / scalar, self.y / scalar, self.z / scalar, self.w / scalar
         )
 
     def projectionVec3(self, v2) -> "HCoord":
@@ -138,5 +143,3 @@ class Point3f(HCoord):
 
     def __add__(self, other):
         return Point3f(self.x + other.x, self.y + other.y, self.z + other.z)
-
-
