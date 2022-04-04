@@ -1,8 +1,8 @@
 {
   "renderSettings": {
-    "xres": 900,
-    "yres": 900,
-    "worker_count": 8,
+    "xres": 512,
+    "yres": 512,
+    "worker_count": 6,
     "bounce_count": 10
   },
   "camera": {
