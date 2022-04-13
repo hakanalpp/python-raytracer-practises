@@ -2,7 +2,7 @@
   "renderSettings": {
     "xres": 400,
     "yres": 400,
-    "worker_count": 8,
+    "worker_count": 6,
     "bounce_count": 10,
     "ambient_ray_count": 7,
     "ambient_coefficient": 0.7,
