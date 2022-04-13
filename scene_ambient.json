@@ -4,7 +4,7 @@
     "yres": 400,
     "worker_count": 8,
     "bounce_count": 10,
-    "ambient_ray_count": 5,
+    "ambient_ray_count": 7,
     "ambient_coefficient": 0.7,
     "ambient_occlusion": true
   },
@@ -67,15 +67,15 @@
   ],
   "meshes": [
     {
-      "filename": "in/shortBox.obj",
+      "filename": "objects/shortBox.obj",
       "shader_type": "Lambert"
     },
     {
-      "filename": "in/tallBox.obj",
+      "filename": "objects/tallBox.obj",
       "shader_type": "Lambert"
     },
     {
-      "filename": "in/ground.obj",
+      "filename": "objects/ground.obj",
       "shader_type": "Lambert"
     }
   ]

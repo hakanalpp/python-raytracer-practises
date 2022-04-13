@@ -104,42 +104,42 @@
   ],
   "meshes": [
     {
-      "filename": "in/shortBox.obj",
+      "filename": "objects/shortBox.obj",
       "shader_type": "Lambert"
     },
     {
-      "filename": "in/tallBox.obj",
+      "filename": "objects/tallBox.obj",
       "shader_type": "Lambert"
     },
     {
-      "filename": "in/ceiling.obj",
+      "filename": "objects/ceiling.obj",
       "shader_type": "Lambert"
     },
     {
-      "filename": "in/rightWall.obj",
+      "filename": "objects/rightWall.obj",
       "shader_type": "Lambert"
     },
     {
-      "filename": "in/floor.obj",
+      "filename": "objects/floor.obj",
       "shader_type": "Lambert",
       "material": "quarter_mirror"
     },
     {
-      "filename": "in/backWall.obj",
+      "filename": "objects/backWall.obj",
       "shader_type": "Lambert",
       "material": "partial_mirror"
     },
     {
-      "filename": "in/leftWall.obj",
+      "filename": "objects/leftWall.obj",
       "shader_type": "Lambert"
     },
     {
-      "filename": "in/lightBox1.obj",
+      "filename": "objects/lightBox1.obj",
       "shader_type": "Lambert",
       "type": "shadowless"
     },
     {
-      "filename": "in/lightBox2.obj",
+      "filename": "objects/lightBox2.obj",
       "shader_type": "Lambert",
       "type": "shadowless"
     }
