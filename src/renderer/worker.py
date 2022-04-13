@@ -22,10 +22,10 @@ class Worker:
             try:
                 task = taskQueue.get_nowait()
 
-                c = self.trace(task)
+                c, sentRay = self.trace(task)
                 task.r, task.g, task.b = c.l[:3]
 
-                eventQueue.put((task.id, task.r, task.g, task.b))
+                eventQueue.put((task.id, task.r, task.g, task.b, sentRay))
 
             except queue.Empty:
                 pass
@@ -35,14 +35,18 @@ class Worker:
         return True
 
     def trace(self, t):
-        base_color, t, should_bounce, old_reflection = self.intersect(t, t.bounce != 0)
+        rayCount = 0
+        base_color, t, should_bounce, old_reflection, sentRay = self.intersect(t, t.bounce != 0)
+        rayCount += sentRay
         while t.bounce != 0 and should_bounce:
-            color, t, should_bounce, new_reflection = self.intersect(t, True)
+            color, t, should_bounce, new_reflection, sentRay = self.intersect(t, True)
+            rayCount += sentRay
             base_color = base_color + color.scalar_product(old_reflection)
             old_reflection = new_reflection
-        return base_color
+        return base_color, rayCount
 
     def intersect(self, t, should_bounce: bool):
+        rayCount = 0
         selected = (
             -1,  # index
             float("inf"),  # distance
@@ -60,33 +64,36 @@ class Worker:
                 t.bounce,
             )
             bb_dist = obj.bounding_box.intersect(ray)
+            rayCount += 1
             if bb_dist == -1 or bb_dist > selected[1]:
                 continue
 
-            distance, color, normal, hitPoint = obj.intersect(ray)
+            distance, color, normal, hitPoint, sentRay = obj.intersect(ray)
+            rayCount += sentRay
             if distance != -1 and distance < selected[1]:
                 selected = (index, distance, color, ray, normal, hitPoint)
 
         if selected[0] == -1:
-            return RGBA(0, 0, 0), t, False, 0
+            return RGBA(0, 0, 0), t, False, 0, rayCount
 
         obj = self.objects[selected[0]]
         color = selected[2]
 
-        new_c = obj.shader.calculate_light(self.objects, selected[5], selected[4])
+        new_c, sentRay = obj.shader.calculate_light(self.objects, selected[5], selected[4])
+        rayCount += sentRay
         color = (color * new_c).scalar_product(obj.material.diffuse)
 
         if not obj.material.shouldBounce() or not should_bounce:
-            return color, t, False, 0
+            return color, t, False, 0, rayCount
 
         if obj.material.shouldReflect():
             t = self.calculate_reflection_ray(t, selected[4], selected[5])
-            return color, t, True, obj.material.reflection
+            return color, t, True, obj.material.reflection, rayCount
 
         t = self.calculate_refraction_ray(
             t, selected[4], selected[5], obj.material.refractive_index
         )
-        return color, t, True, obj.material.refraction
+        return color, t, True, obj.material.refraction, rayCount
 
     def calculate_reflection_ray(self, t, normal: "Vector3f", hitPoint: "Point3f"):
         rayDirection = Vector3f(

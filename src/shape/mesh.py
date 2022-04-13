@@ -18,7 +18,7 @@ class Mesh(Shape):
         faces: "list[list[int]]",
         normals: "list[Vector3f]",
         colors: "list[RGBA]",
-        material: "Material", 
+        material: "Material",
         shader: "Shader",
         type: str = "default",
     ) -> "Mesh":
@@ -36,8 +36,10 @@ class Mesh(Shape):
         index = 0
         selected_index = 0
         selected_P = Point3f(-1, -1, -1)
+        rayCount = 0
         for f in self.faces:
             temp_d, P = self.intersect_with_face(ray, f, self.normals[index])
+            rayCount += 1
             if temp_d != -1 and temp_d < distance:
                 distance = temp_d
                 selected_index = index
@@ -50,6 +52,7 @@ class Mesh(Shape):
             self.colors[selected_index],
             HCoord.get_normal_vector(v[f[0]], v[f[1]], v[f[2]]),
             selected_P,
+            rayCount,
         ]
 
     def intersect_with_face(self, ray: "Ray", face: "list[int]", normal: "Vector3f"):

@@ -59,10 +59,9 @@ class Scene(QObject):
 
         while self.eventCounter < len(self.tasks) and not self.stopRender:
             try:
-                tid, r, g, b = self.eventQueue.get_nowait()
+                tid, r, g, b, rayCount = self.eventQueue.get_nowait()
                 self.eventCounter += 1
-                if r != 0 or g != 0 or b != 0:
-                    self.sentRayCount += lc
+                self.sentRayCount += rayCount
 
                 self.updateImgBuffer(tid, r, g, b)
                 if self.eventCounter % (self.resolution[0] * 10) == 0:

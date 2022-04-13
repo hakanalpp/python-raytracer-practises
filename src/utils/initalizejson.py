@@ -62,7 +62,7 @@ def initalize_scene(filename) -> "Scene":
     default_material = Material("default", 0, 0)
     material_names = list(map(lambda x: x.name, materials))
 
-    lambert_shader = LambertShader(lights)
+    lambert_shader = LambertShader(lights, settings["ambient_ray_count"], settings["ambient_coefficient"], settings["ambient_occlusion"])
 
     objects = []
     for s in obj["spheres"]:

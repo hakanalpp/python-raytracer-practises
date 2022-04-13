@@ -1,0 +1,82 @@
+{
+  "renderSettings": {
+    "xres": 400,
+    "yres": 400,
+    "worker_count": 8,
+    "bounce_count": 10,
+    "ambient_ray_count": 5,
+    "ambient_coefficient": 0.7,
+    "ambient_occlusion": true
+  },
+  "camera": {
+    "posX": 0.0,
+    "posY": 15.0,
+    "posZ": 85.0,
+    "dirX": 0.0,
+    "dirY": -0.1,
+    "dirZ": -1.0,
+    "upX": 0.0,
+    "upY": 0.9,
+    "upZ": 0.0,
+    "focalLength": 1.6,
+    "fov": 60
+  },
+  "materials": [
+    {
+      "name": "glass",
+      "reflection": 0.0,
+      "refraction": 0.9,
+      "refractive_index": 1.52
+    },
+    {
+      "name": "mirror",
+      "reflection": 0.7,
+      "refraction": 0.0
+    },
+    {
+      "name": "partial_mirror",
+      "reflection": 0.7,
+      "refraction": 0.0
+    },
+    {
+      "name": "half_mirror",
+      "reflection": 0.5,
+      "refraction": 0.0
+    },
+    {
+      "name": "quarter_mirror",
+      "reflection": 0.2,
+      "refraction": 0.0
+    }
+  ],
+  "lights": [],
+  "spheres": [
+    {
+      "shader_type": "Lambert",
+      "material": "glass",
+      "radius": 4,
+      "posX": 0.0,
+      "posY": 5.0,
+      "posZ": 25.0,
+      "color": {
+        "r": 255,
+        "g": 0,
+        "b": 0
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "filename": "in/shortBox.obj",
+      "shader_type": "Lambert"
+    },
+    {
+      "filename": "in/tallBox.obj",
+      "shader_type": "Lambert"
+    },
+    {
+      "filename": "in/ground.obj",
+      "shader_type": "Lambert"
+    }
+  ]
+}

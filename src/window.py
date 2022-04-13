@@ -79,7 +79,7 @@ class MainWindow(QMainWindow):
         if not self.objectName():
             self.setObjectName("lala")
         self.resize(self.width + 25, self.height + 30)
-        self.setWindowTitle("Hakan Alp - Assignment 4")
+        self.setWindowTitle("Hakan Alp - Assignment 5")
         self.setStyleSheet("background-color:black;")
         self.setAutoFillBackground(True)
 

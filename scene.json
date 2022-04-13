@@ -1,9 +1,12 @@
 {
   "renderSettings": {
-    "xres": 512,
-    "yres": 512,
-    "worker_count": 6,
-    "bounce_count": 10
+    "xres": 400,
+    "yres": 400,
+    "worker_count": 8,
+    "bounce_count": 10,
+    "ambient_ray_count": 4,
+    "ambient_coefficient": 0.2,
+    "ambient_occlusion": false
   },
   "camera": {
     "posX": 17.0,
@@ -57,7 +60,7 @@
         "g": 1,
         "b": 1
       },
-      "intensity": 1.0
+      "intensity": 0.5
     },
     {
       "type": "PointLight",
@@ -69,7 +72,7 @@
         "g": 1,
         "b": 1
       },
-      "intensity": 1.0
+      "intensity": 0.5
     }
   ],
   "spheres": [
