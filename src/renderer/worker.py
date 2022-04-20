@@ -46,7 +46,7 @@ class Worker:
         return base_color, rayCount
 
     def intersect(self, t, should_bounce: bool):
-        rayCount = 0
+        rayCount = 1
         selected = (
             -1,  # index
             float("inf"),  # distance
@@ -64,12 +64,10 @@ class Worker:
                 t.bounce,
             )
             bb_dist = obj.bounding_box.intersect(ray)
-            rayCount += 1
             if bb_dist == -1 or bb_dist > selected[1]:
                 continue
 
-            distance, color, normal, hitPoint, sentRay = obj.intersect(ray)
-            rayCount += sentRay
+            distance, color, normal, hitPoint = obj.intersect(ray)
             if distance != -1 and distance < selected[1]:
                 selected = (index, distance, color, ray, normal, hitPoint)
 

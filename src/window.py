@@ -7,7 +7,6 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from .signal import Communicate
-
 from src.scene import Scene
 
 
@@ -33,7 +32,7 @@ class PaintWidget(QWidget):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, qApp, scene: "Scene"):
+    def __init__(self, qApp, scene: "Scene", name="string"):
         super().__init__()
         self.qApp: QApplication = qApp
         self.gfxScene = QGraphicsScene()
@@ -41,6 +40,7 @@ class MainWindow(QMainWindow):
         self.scene = scene
         self.width = scene.resolution[0]
         self.height = scene.resolution[1]
+        self.name = name
 
         self.signals = Communicate()
         self.signals.status_message.connect(self.statusbar_message)
@@ -62,6 +62,7 @@ class MainWindow(QMainWindow):
         while not self.scene.processes_closed():
             pass
 
+        self.paintWidget.imgBuffer.save(f"images/ass5/{self.name}")
         self.qApp.processEvents()
         self.rendererThread.quit()
         self.rendererThread.wait()
