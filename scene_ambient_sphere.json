@@ -4,7 +4,7 @@
     "yres": 512,
     "worker_count": 8,
     "bounce_count": 10,
-    "ambient_ray_count": 100,
+    "ambient_ray_count": 256,
     "ambient_coefficient": 0.7,
     "ambient_occlusion": true,
     "sampling_type": 2
