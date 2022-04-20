@@ -4,7 +4,7 @@
     "yres": 512,
     "worker_count": 8,
     "bounce_count": 10,
-    "ambient_ray_count": 256,
+    "ambient_ray_count": 100,
     "ambient_coefficient": 0.7,
     "ambient_occlusion": true,
     "sampling_type": 2
@@ -12,14 +12,14 @@
   "sampling_types": ["cosine_weighted", "grid", "grid_cosine_importance"],
   "camera": {
     "posX": 0.0,
-    "posY": 15.0,
+    "posY": 25.0,
     "posZ": 85.0,
     "dirX": 0.0,
-    "dirY": -0.1,
-    "dirZ": -1.0,
+    "dirY": -0.19612,
+    "dirZ": -1,
     "upX": 0.0,
-    "upY": 0.9,
-    "upZ": 0.0,
+    "upY": 0.98058,
+    "upZ": -0.19611,
     "focalLength": 1.6,
     "fov": 60
   },
@@ -55,26 +55,18 @@
   "spheres": [
     {
       "shader_type": "Lambert",
-      "radius": 4,
+      "radius": 18,
       "posX": 0.0,
-      "posY": 5.0,
-      "posZ": 25.0,
+      "posY": 18.05,
+      "posZ": 15.0,
       "color": {
-        "r": 255,
-        "g": 0,
-        "b": 0
+        "r": 90,
+        "g": 200,
+        "b": 90
       }
     }
   ],
   "meshes": [
-    {
-      "filename": "objects/shortBox.obj",
-      "shader_type": "Lambert"
-    },
-    {
-      "filename": "objects/tallBox.obj",
-      "shader_type": "Lambert"
-    },
     {
       "filename": "objects/ground.obj",
       "shader_type": "Lambert"

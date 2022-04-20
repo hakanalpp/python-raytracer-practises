@@ -38,7 +38,7 @@ class Sphere(Shape):
         c = oc.dot(oc) - (self.radius * self.radius)
         sqr_disc = b * b - 4 * a * c
         if sqr_disc < 0:
-            return [-1, None, None, None, 1]
+            return [-1, None, None, None]
         discriminant = sqrt(sqr_disc)
         if a == 0:
             a = 10e-12  # prevent division by zero
@@ -46,13 +46,13 @@ class Sphere(Shape):
         t1 = (-b - discriminant) / (2 * a)
         
         if t0 < 0.1 or t1 < 0.1:
-            return [-1, None, None, None, 1]
+            return [-1, None, None, None]
 
         t_min = min(t0, t1)
 
         hitPoint = ray.position + (ray.direction.normalize() * t_min)
         normal = (hitPoint - self.position).normalize()
-        return [t_min, self.color, normal, hitPoint, 1]
+        return [t_min, self.color, normal, hitPoint]
 
     def calculate_bounding_box(self):
         area = self.radius * sqrt(2)
