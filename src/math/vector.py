@@ -24,7 +24,7 @@ class HCoord:
         return [self.x, self.y, self.z, self.w]
 
     def clone(self) -> "HCoord":
-        return HCoord(self)
+        return HCoord(self.x, self.y, self.z, self.w)
 
     def asVertex3f(self, mat: "ndarray"):
         v = mat.dot(self.asList())

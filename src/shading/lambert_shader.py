@@ -5,6 +5,7 @@ from src.shading.shader import Shader
 class LambertShader(Shader):
     def __init__(
         self,
+        accelerator,
         lights,
         ambient_ray_count,
         ambient_coefficient,
@@ -12,6 +13,7 @@ class LambertShader(Shader):
         sampling_type,
     ) -> None:
         super().__init__(
+            accelerator,
             lights,
             ambient_ray_count,
             ambient_coefficient,
@@ -19,11 +21,11 @@ class LambertShader(Shader):
             sampling_type,
         )
 
-    def calculate_light(self, objects, hitPoint: "Point3f", normal: "Vector3f"):
+    def calculate_light(self, hitPoint: "Point3f", normal: "Vector3f"):
         rayCount = 0
         ambient_rate, sentRay = self.calculate_ambient_occlusion(
-            objects, hitPoint, normal
-        )  # Calculate ambient occlusion as first step.
+            hitPoint, normal
+        )
         rayCount += sentRay
 
         if len(self.lights) == 0:
@@ -35,37 +37,18 @@ class LambertShader(Shader):
             distance = HCoord.get_length_between_points(hitPoint, l.position)
             ray = Ray("light", l.position, (hitPoint - l.position).normalize(), 0)
 
-            flag = False
-            for obj in objects:
-                if obj.type == "shadowless":
-                    continue
-                bb_dist = obj.bounding_box.intersect(ray)
-                if bb_dist == -1 or bb_dist > distance:
-                    continue
+            selected = self.accelerator.intersect_ray(ray, distance)
 
-                temp_dist, _, _, _ = obj.intersect(ray)
-                if temp_dist == distance:
-                    continue
+            if selected[0] is None:
+                l_factor = max(-normal.normalize().dot(ray.direction.normalize()), 0.0001)
+                new_color = l.color.scalar_product(
+                    l_factor * l.intensity
+                )
+                ligs.append(new_color)
 
-                if temp_dist != -1 and distance - temp_dist > 0.001:
-                    ligs.append(
-                        l.color.scalar_product(
-                            ambient_rate * (l.intensity / light_count)
-                        )
-                    )  # TODO /light_count'u gamma functionla değiştir.
-                    flag = True
-                    break
-            if flag:
-                continue
+        total_light = RGBA(ambient_rate, ambient_rate, ambient_rate)
 
-            l_factor = max(-normal.normalize().dot(ray.direction.normalize()), 0.0001)
-            new_color = l.color.scalar_product(
-                l_factor * (l.intensity / light_count)
-            ) + RGBA(ambient_rate, ambient_rate, ambient_rate)
-            ligs.append(new_color)
-
-        total_light = ligs[0]
-        for i in range(1, len(ligs)):
+        for i in range(0, len(ligs)):
             total_light += ligs[i]
 
         return total_light, rayCount + light_count

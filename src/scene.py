@@ -11,19 +11,19 @@ from multiprocessing import Queue
 import time
 import queue
 
+from .accelerator import Accelerator
 from .light.light import Light
 from .renderer.worker import Worker
 from .camera import Camera
-from .shape.shape import Shape
 from .renderer.task import Task
 
 
 class Scene(QObject):
-    def __init__(self, xRes, yRes, camera, objects, lights, workerCount, bounceCount):
+    def __init__(self, xRes, yRes, camera, accelerator: 'Accelerator', lights, workerCount, bounceCount):
         super().__init__()
         self.resolution: "tuple(int, int)" = (xRes, yRes)
         self.camera: "Camera" = camera
-        self.objects: "list[Shape]" = objects
+        self.accelerator: "Accelerator" = accelerator
         self.lights: "list[Light]" = lights
         self.bounceCount = bounceCount
         self.sentRayCount = 0
@@ -42,14 +42,13 @@ class Scene(QObject):
 
     def render(self):
         now = time.time()
-        lc = len(self.lights)
         self.signals.status_message.emit("Preparing Task Queue...")
 
         self.prepare_task_queue()
         self.signals.status_message.emit("Sending rays...")
 
         for id in range(self.workerCount):
-            w = Worker(self.objects, id)
+            w = Worker(self.accelerator, id)
             p = Process(
                 target=w.do_job,
                 args=(self.taskQueue, self.eventQueue),

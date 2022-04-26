@@ -3,12 +3,14 @@
 # StudentId: 250201056
 # April 2022
 
+from ..math import RGBA, Vector3f
+from ..accelerator import ListAccelerator, BVHAccelerator
 from ..light.point_light import PointLight
 from ..shading.lambert_shader import LambertShader
 from .obj_parser import generate_vertices_with_tn
 from ..camera import Camera
 from ..scene import Scene
-from ..shape import Sphere, Mesh, Material
+from ..shape import Sphere, Mesh, Material, AABB, SphereGenerator
 from .readjson import readJson
 
 
@@ -50,13 +52,11 @@ def initalize_scene(filename) -> "Scene":
 
     materials = []
     for m in obj["materials"]:
-        mat = Material(
-            m["name"],
-            m["reflection"],
-            m["refraction"],
-        )
+        refractive_index = 1
         if "refractive_index" in m:
-            mat.refractive_index = m["refractive_index"]
+            refractive_index = m["refractive_index"]
+        
+        mat = Material(m["name"], m["reflection"], m["refraction"], refractive_index)
         materials.append(mat)
 
     default_material = Material("default", 0, 0)
@@ -64,10 +64,29 @@ def initalize_scene(filename) -> "Scene":
 
     sampling_types = obj["sampling_types"]
     sampling_index = settings["sampling_type"]
-    if (len(sampling_types) <= sampling_index):
+    if len(sampling_types) <= sampling_index:
         sampling_index = 0
 
-    lambert_shader = LambertShader(lights, settings["ambient_ray_count"], settings["ambient_coefficient"], settings["ambient_occlusion"], sampling_types[sampling_index])
+    accelerator = None
+    accelerator_types = obj["accelerator_types"]
+    if "accelerator_type" in settings:
+        accelerator_type = settings["accelerator_type"]
+        accelerator_name = accelerator_types[accelerator_type]
+        if accelerator_name == "BVHAccelerator":
+            accelerator = BVHAccelerator([])
+        else:
+            accelerator = ListAccelerator([])
+    else:
+        accelerator = ListAccelerator([])
+
+    lambert_shader = LambertShader(
+        accelerator,
+        lights,
+        settings["ambient_ray_count"],
+        settings["ambient_coefficient"],
+        settings["ambient_occlusion"],
+        sampling_types[sampling_index],
+    )
 
     objects = []
     for s in obj["spheres"]:
@@ -114,11 +133,31 @@ def initalize_scene(filename) -> "Scene":
             Mesh(specs[0], specs[1], specs[2], specs[3], material, shader, t)
         )
 
+    if "generators" in obj and len(obj["generators"]) > 0:
+        for g in obj["generators"]:
+            box = AABB()
+            bmin = g["boundary"]["min"]
+            box.min = Vector3f(bmin["x"], bmin["y"], bmin["z"])
+            bmax = g["boundary"]["max"]
+            box.max = Vector3f(bmax["x"], bmax["y"], bmax["z"])
+            color = RGBA(g["color"]["r"], g["color"]["g"], g["color"]["b"]) if "color" in g else None
+
+            material = default_material
+            if "material" in g and g["material"] in material_names:
+                material = materials[material_names.index(g["material"])]
+
+            gen = SphereGenerator(g["radius"]["min"], g["radius"]["max"],box, lambert_shader, color, material, g["seed"])
+            for _ in range(g["count"]):
+                objects.append(gen.generate())
+
+    accelerator.objects = objects
+    accelerator.initialize()
+
     return Scene(
         settings["xres"],
         settings["yres"],
         camera,
-        objects,
+        accelerator,
         lights,
         settings["worker_count"],
         settings["bounce_count"],

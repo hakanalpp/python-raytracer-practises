@@ -5,23 +5,23 @@
 
 from abc import abstractmethod
 from math import cos, isqrt, pi, radians, sin, sqrt
+import numpy as np
 
 from ..math import Point3f, Ray, Vector3f
-
 from ..light import Light
-
-import numpy as np
 
 
 class Shader:
     def __init__(
         self,
+        accelerator,
         lights,
         ambient_ray_count,
         ambient_coefficient,
         ambient_occlusion: "bool",
         sampling_type: "str",
     ) -> None:
+        self.accelerator = accelerator
         self.lights: "list[Light]" = lights
         self.ambient_ray_count = ambient_ray_count
         self.ambient_coefficient = ambient_coefficient
@@ -33,7 +33,7 @@ class Shader:
     def calculate_light(self):
         return
 
-    def calculate_ambient_occlusion(self, objects, hitPoint: "Point3f", normal):
+    def calculate_ambient_occlusion(self, hitPoint: "Point3f", normal):
         if not self.ambient_occlusion or self.ambient_ray_count == 0:
             return self.ambient_coefficient, 0
 
@@ -42,33 +42,33 @@ class Shader:
         count, ambient_ray_count = 0, 0
         if self.sampling_type == "cosine_weighted":
             count, ambient_ray_count = self.calculate_sampled_hemisphere(
-                ray_count, objects, hitPoint, normal
+                ray_count, hitPoint, normal
             )
         elif self.sampling_type == "grid":
             count, ambient_ray_count = self.calculate_grid_hemisphere(
-                ray_count, objects, hitPoint, normal
+                ray_count, hitPoint, normal
             )
         elif self.sampling_type == "grid_cosine_importance":
             count, ambient_ray_count = self.calculate_grid_cosine_importance(
-                ray_count, objects, hitPoint, normal
+                ray_count, hitPoint, normal
             )
 
         return self.ambient_coefficient * (count / ambient_ray_count), ambient_ray_count
 
     def calculate_grid_cosine_importance(
-        self, ray_count, objects, hitPoint: "Point3f", normal
+        self, ray_count, hitPoint: "Point3f", normal
     ):
         count1, ambient_ray_count1 = self.calculate_grid_hemisphere(
-            int(ray_count / 3), objects, hitPoint, normal
+            int(ray_count / 3), hitPoint, normal
         )
         count2, ambient_ray_count2 = self.calculate_sampled_hemisphere(
-            int(2 * ray_count / 3), objects, hitPoint, normal
+            int(2 * ray_count / 3), hitPoint, normal
         )
 
         return count1 + count2, ambient_ray_count1 + ambient_ray_count2
 
     def calculate_sampled_hemisphere(
-        self, ray_count, objects, hitPoint: "Point3f", normal
+        self, ray_count, hitPoint: "Point3f", normal
     ):
         Nt, Nb = self.createCoordinateSystem(normal)
 
@@ -82,20 +82,13 @@ class Shader:
                 continue
 
             sucessful_ray_count += 1
-            count += self.send_ambient_ray(
-                objects,
-                Ray(
-                    "Ambient",
-                    hitPoint,
-                    ray,
-                    0,
-                ),
-            )
+            ray = Ray("Ambient",hitPoint,ray,0)
+            count += self.accelerator.intersect_ray(ray)[0] is None
 
         return count, ray_count
 
     def calculate_grid_hemisphere(
-        self, ray_count, objects, hitPoint: "Point3f", normal
+        self, ray_count, hitPoint: "Point3f", _
     ):
         ray_count = isqrt(int(ray_count))
 
@@ -111,15 +104,9 @@ class Shader:
                     cos(yRad),
                 ).normalize()
 
-                count += self.send_ambient_ray(
-                    objects,
-                    Ray(
-                        "Ambient",
-                        hitPoint,
-                        v,
-                        0,
-                    ),
-                )
+                ray = Ray("Ambient",hitPoint,v,0)
+                count += self.accelerator.intersect_ray(ray)[0] is None
+
         return count, int(ray_count ** 2)
 
     def createCoordinateSystem(self, N: "Vector3f"):
@@ -144,11 +131,3 @@ class Shader:
             v.x * Nb.y + v.y * normal.y + v.z * Nt.y,
             v.x * Nb.z + v.y * normal.z + v.z * Nt.z,
         )
-
-    def send_ambient_ray(self, objects, ray: "Ray"):
-        dist = -1
-        for obj in objects:
-            dist = obj.intersect(ray)[0]
-            if dist != float("inf") and dist > 10e-10:
-                return False
-        return True

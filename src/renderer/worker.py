@@ -2,15 +2,15 @@ from math import acos, asin, cos, sin
 from multiprocessing import Value
 import queue
 
-from .task import Task
-
+from ..accelerator import Accelerator
 from ..shape import Shape
+from .task import Task
 from ..math import Point3f, Vector3f, Ray, RGBA
 
 
 class Worker:
-    def __init__(self, objects, id):
-        self.objects: list[Shape] = objects
+    def __init__(self, accelerator, id):
+        self.accelerator: 'Accelerator' = accelerator
         self.id = id
         self.stop = Value("b", False, lock=False)
 
@@ -47,37 +47,22 @@ class Worker:
 
     def intersect(self, t, should_bounce: bool):
         rayCount = 1
-        selected = (
-            -1,  # index
-            float("inf"),  # distance
-            RGBA(0, 0, 0),  # color
-            None,  # ray
-            None,  # normal
-            None,  # hitPoint
-        )  # (index, distance, color, ray, normal, hitPoint)
+        
+        ray = Ray(
+            "Camera",
+            Point3f(t.pointX, t.pointY, t.pointZ),
+            Vector3f(t.dirX, t.dirY, t.dirZ),
+            t.bounce,
+        )
+        selected = self.accelerator.intersect_ray(ray)
 
-        for index, obj in enumerate(self.objects):
-            ray = Ray(
-                "Camera",
-                Point3f(t.pointX, t.pointY, t.pointZ),
-                Vector3f(t.dirX, t.dirY, t.dirZ),
-                t.bounce,
-            )
-            bb_dist = obj.bounding_box.intersect(ray)
-            if bb_dist == -1 or bb_dist > selected[1]:
-                continue
-
-            distance, color, normal, hitPoint = obj.intersect(ray)
-            if distance != -1 and distance < selected[1]:
-                selected = (index, distance, color, ray, normal, hitPoint)
-
-        if selected[0] == -1:
+        if selected[0] == None:
             return RGBA(0, 0, 0), t, False, 0, rayCount
 
-        obj = self.objects[selected[0]]
+        obj: Shape = selected[0]
         color = selected[2]
 
-        new_c, sentRay = obj.shader.calculate_light(self.objects, selected[5], selected[4])
+        new_c, sentRay = obj.shader.calculate_light(selected[5], selected[4])
         rayCount += sentRay
         color = (color * new_c).scalar_product(obj.material.diffuse)
 

@@ -28,7 +28,7 @@ if __name__ == "__main__":
     name = f"{scene.resolution[0]}x{scene.resolution[1]}_{scene.workerCount}_{scene.bounceCount}"
     if len(sys.argv) == 3:
         name = sys.argv[2]
-    if exists("images/ass5/" + name + ".png"):
+    if exists("images/" + name + ".png"):
         name = name + f"_{randint(1000,9999999)}"
     name += ".png"
 

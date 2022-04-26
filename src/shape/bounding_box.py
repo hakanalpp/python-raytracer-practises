@@ -3,6 +3,7 @@
 # StudentId: 250201056
 # April 2022
 
+import functools
 from ..math import Vector3f, Ray
 
 # Bounding Box is implemented by Gokberk Akdeniz
@@ -49,6 +50,24 @@ class AABB:
             tmax = tzmax
 
         return tmin
+
+    def union(self, aabb2: 'AABB') -> 'AABB':
+        result = AABB()
+
+        result.min.x = min(self.min.x, aabb2.min.x)
+        result.min.y = min(self.min.y, aabb2.min.y)
+        result.min.z = min(self.min.z, aabb2.min.z)
+
+        result.max.x = max(self.max.x, aabb2.max.x)
+        result.max.y = max(self.max.y, aabb2.max.y)
+        result.max.z = max(self.max.z, aabb2.max.z)
+
+        return result
+
+    
+    @functools.cached_property
+    def centeroid(self):
+        return (self.max + self.min)* 0.5
 
 
 __all__ = ["AABB"]

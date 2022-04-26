@@ -1,0 +1,57 @@
+{
+  "renderSettings": {
+    "xres": 512,
+    "yres": 512,
+    "worker_count": 8,
+    "bounce_count": 10,
+    "ambient_ray_count": 0,
+    "ambient_coefficient": 0.7,
+    "ambient_occlusion": false,
+    "sampling_type": 0,
+    "accelerator_type": 1
+  },
+  "accelerator_types": ["ListAccelerator", "BVHAccelerator"],
+  "sampling_types": ["cosine_weighted", "grid", "grid_cosine_importance"],
+  "camera": {
+    "posX": 0.0,
+    "posY": 0.0,
+    "posZ": 100.0,
+    "dirX": 0.0,
+    "dirY": 0.0,
+    "dirZ": -1,
+    "upX": 0.0,
+    "upY": 1.0,
+    "upZ": 0.0,
+    "focalLength": 1.6,
+    "fov": 60
+  },
+  "materials": [],
+  "generators": [
+    {
+      "type": "SphereGenerator",
+      "radius": {
+          "min": 1,
+          "max": 25
+      },
+      "count": 10000,
+      "seed": 5134,
+      "boundary": {
+          "min": {
+              "x": -1000,
+              "y": -1000,
+              "z": -2700
+          },
+          "max": {
+              "x": 1000,
+              "y": 1000,
+              "z": -1700
+          }
+      },
+      "shader_type": "Lambert",
+      "material": "Lambert"
+  }
+  ],
+  "lights": [],
+  "spheres": [],
+  "meshes": []
+}

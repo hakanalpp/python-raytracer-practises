@@ -7,8 +7,10 @@
     "ambient_ray_count": 100,
     "ambient_coefficient": 0.7,
     "ambient_occlusion": true,
-    "sampling_type": 2
+    "sampling_type": 2,
+    "accelerator_type": 0
   },
+  "accelerator_types": ["ListAccelerator", "BVHAccelerator"],
   "sampling_types": ["cosine_weighted", "grid", "grid_cosine_importance"],
   "camera": {
     "posX": 0.0,
@@ -51,7 +53,33 @@
       "refraction": 0.0
     }
   ],
-  "lights": [],
+  "generators": [],
+  "lights": [
+    {
+      "type": "PointLight",
+      "posX": -9.0,
+      "posY": 18.0,
+      "posZ": 40.0,
+      "color": {
+        "r": 1,
+        "g": 0,
+        "b": 0
+      },
+      "intensity": 1.0
+    },
+    {
+      "type": "PointLight",
+      "posX": 9.0,
+      "posY": 18.0,
+      "posZ": 40.0,
+      "color": {
+        "r": 0,
+        "g": 0,
+        "b": 1
+      },
+      "intensity": 1.0
+    }
+  ],
   "spheres": [
     {
       "shader_type": "Lambert",
