@@ -33,35 +33,51 @@ class KDTreeAccelerator(Accelerator):
     def __init__(self, objects):
         super().__init__(objects)
         self.root = None
-        self.empty_selected = (
+        self.empty_selected = [
             None,  # shape
             -1,  # distance
             RGBA(0, 0, 0),  # color
             None,  # ray
             None,  # normal
             None,  # hitPoint
-        )
+        ]
+        self.total_selected = [
+            None,  # shape
+            -1,  # distance
+            RGBA(0, 0, 0),  # color
+            None,  # ray
+            None,  # normal
+            None,  # hitPoint
+        ]
 
     def initialize(self):
         self.root = self.create_root()
         self.build_tree(self.root)
 
     def intersect_ray(self, ray: "Ray", distance=float("inf")):
-        return self.rec_intersect_ray(self.root, ray, distance)
+        selected = (
+            None,  # shape
+            distance,  # distance
+            RGBA(0, 0, 0),  # color
+            None,  # ray
+            None,  # normal
+            None,  # hitPoint
+        )  # (object, distance, color, ray, normal, hitPoint)
 
-    def rec_intersect_ray(self, node: Node, ray, distance):
-        bb_dist = node.box.intersect(ray)
-        if bb_dist == -1 or bb_dist > distance:
-            return self.empty_selected
-        if node.left_child == None:
-            return self.intersect_shapes(node.shapes, ray, distance)
+        node_stack: list[Node] = [self.root]
+        while len(node_stack) > 0:
+            node = node_stack.pop()
 
-        left_bb_dist = node.left_child.box.intersect(ray)
-        right_bb_dist = node.right_child.box.intersect(ray)
-        if left_bb_dist != -1 and left_bb_dist <= distance:
-            return self.rec_intersect_ray(node.left_child, ray, distance)
+            if node.left_child == None:
+                temp = self.intersect_shapes(node.shapes, ray, distance)
+                if temp[1] <= selected[1]:
+                    selected = temp
+            else:
+                if node.box.intersect(ray) != -1:
+                    node_stack.append(node.left_child)
+                    node_stack.append(node.right_child)
 
-        return self.rec_intersect_ray(node.right_child, ray, distance)
+        return selected
 
     def intersect_shapes(self, shapes: list[Shape], ray, distance):
         selected = (
@@ -79,7 +95,7 @@ class KDTreeAccelerator(Accelerator):
 
         return selected
 
-    def build_tree(self, node: Node): # True
+    def build_tree(self, node: Node):  # True
         if not node.shapes or len(node.shapes) <= 1:
             return self.empty_selected
 
@@ -96,10 +112,10 @@ class KDTreeAccelerator(Accelerator):
         self.build_tree(left_child)
         self.build_tree(right_child)
 
-    def is_shape_left(self, shape: Shape, coord: Union[str, int]): # True
+    def is_shape_left(self, shape: Shape, coord: Union[str, int]):  # True
         return getattr(shape.bounding_box.centeroid, coord[0]) <= coord[1]
 
-    def create_child_nodes(self, node, axis): # Kinda True
+    def create_child_nodes(self, node, axis):  # Kinda True
         left_box = AABB()
         left_box.min = node.box.min.clone()
         left_box.max = node.box.max.clone()
