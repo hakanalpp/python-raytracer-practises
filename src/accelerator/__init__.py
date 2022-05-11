@@ -6,6 +6,7 @@
 from .accelerator import Accelerator
 from .list_accelerator import ListAccelerator
 from .bvh_accelerator import BVHAccelerator
+from .kdtree_accelerator import KDTreeAccelerator
 from .node import Node
 
-__all__ = [Accelerator, ListAccelerator, BVHAccelerator, Node]
+__all__ = [Accelerator, ListAccelerator, BVHAccelerator, KDTreeAccelerator, Node]

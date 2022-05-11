@@ -55,7 +55,5 @@ class Sphere(Shape):
         return [t_min, self.color, normal, hitPoint]
 
     def calculate_bounding_box(self):
-        area = self.radius * sqrt(2)
-
-        self.bounding_box.min = Vector3f(-area, -area, -area) + self.position
-        self.bounding_box.max = Vector3f(area, area, area) + self.position
+        self.bounding_box.min = Vector3f(-self.radius, -self.radius, -self.radius) + self.position
+        self.bounding_box.max = Vector3f(self.radius, self.radius, self.radius) + self.position

@@ -4,7 +4,7 @@
 # April 2022
 
 from ..math import RGBA, Vector3f
-from ..accelerator import ListAccelerator, BVHAccelerator
+from ..accelerator import ListAccelerator, BVHAccelerator, KDTreeAccelerator
 from ..light.point_light import PointLight
 from ..shading.lambert_shader import LambertShader
 from .obj_parser import generate_vertices_with_tn
@@ -74,6 +74,8 @@ def initalize_scene(filename) -> "Scene":
         accelerator_name = accelerator_types[accelerator_type]
         if accelerator_name == "BVHAccelerator":
             accelerator = BVHAccelerator([])
+        elif accelerator_name == "KDTreeAccelerator":
+            accelerator = KDTreeAccelerator([])
         else:
             accelerator = ListAccelerator([])
     else:
