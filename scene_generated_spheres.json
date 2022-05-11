@@ -8,7 +8,7 @@
     "ambient_coefficient": 0.7,
     "ambient_occlusion": false,
     "sampling_type": 0,
-    "accelerator_type": 2
+    "accelerator_type": 1
   },
   "accelerator_types": ["ListAccelerator", "BVHAccelerator", "KDTreeAccelerator"],
   "sampling_types": ["cosine_weighted", "grid", "grid_cosine_importance"],
