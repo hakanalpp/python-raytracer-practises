@@ -1,7 +1,7 @@
-# CENG 488 Assignment#6 by
+# CENG 488 Assignment#7 by
 # Hakan Alp
 # StudentId: 250201056
-# April 2022
+# May 2022
 
 from abc import abstractmethod
 from math import cos, isqrt, pi, radians, sin, sqrt
